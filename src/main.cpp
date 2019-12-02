@@ -38,8 +38,8 @@ int main()
 		requestFrom(0x9A, 0x00); //request the TEMP register of the device
 		temp = read();
 
-    //Convert to Fahrenheit
-    convToF(&temp);
+    	//Convert to Fahrenheit
+    	temp = convToF(temp);
 
 		// Print data
 		Serial.print("Temperature is: ");
