@@ -83,8 +83,8 @@ int main()
 			//take temperature (AND SOIL MOISTURE?) sensor(s) out of standby
 			//measures temperature and soil moisture 
 			//print temperature to LCD
-			//if temperature is above 1 Celsius (as sensor tolerance is +/- 1C) and soil is dry, state = watering
-			//else, state = standby     
+			//if (temperature is above 1 Celsius (as sensor tolerance is +/- 1C) and soil is dry) { state = watering; }
+			//else { state = standby; }    
 			break;
 
       	case watering:	//Water plant for BLANK seconds of time, with indications to user with use of LEDs
