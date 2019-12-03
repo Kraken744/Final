@@ -1,10 +1,11 @@
-//Temperature Sensor Code for Final Project
+
 #include <Arduino.h>
 #include "timer.h"
 #include "i2c.h"
 #include "tempConv.h"
 #include "lcd.h"
 #include "led.h"
+#include "adc.h"
 
 
 typedef enum stateType_enum {
@@ -22,11 +23,24 @@ void setup() {
 	initTimer();
 	initLCD();
 	initLED();
+	initADC0();
 }
 
 int main()
 {
 	int temp = 0;
+	///////////////////////////////////////////////////////
+	//Intaking analog voltage from moisture sensor, converting to digital with ADC0
+	unsigned int moistureAnalog = 0;
+	unsigned int moistureVolt = 0;
+
+	// read in ADCL first then read ADCH
+    moistureAnalog = ADCL;
+    moistureAnalog += ((unsigned int) ADCH) << 8;
+
+    //need to check voltage for VCC
+    moistureVolt = moistureAnalog * (4.943/1024.0);
+	/////////////////////////////////////////////////////
 
 	beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
 	write(0x01); // command byte selects the CONFIG register
