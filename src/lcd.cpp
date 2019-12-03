@@ -1,16 +1,10 @@
-// Author: 
-// Net ID: 
-// Date: 
-// Assignment: Lab 3
-//----------------------------------------------------------------------//
+
 #include "lcd.h"
 #include "timer.h"
 #include <util/delay.h>
 //#include <Arduino.h>
 
-/*
- * Initializes all pins related to the LCD to be outputs
- */
+
 void initLCDPins(){
 
   //PORTA is for DB[7:4]
@@ -21,14 +15,6 @@ void initLCDPins(){
 
 }
 
-/* 1. Assert bits to pins connected to DB[7:4] on the LCD screen
- *      a. data is an unsigned char which has 8 bits. Therefore, you
- *         need assign the bottom 4 bits of "data" to the appropriate bits in
- *         PORTA
- *  2. This is a "command" signal, meaning RS should be Low
- *  3. Assert high on enable pin, delay, and asset low on enable pin
- *  4. delay the provided number in MICROseconds.
- */
 void fourBitCommandWithDelay(unsigned char data, unsigned int delay){
 
   // assigns bottom 4 bits of data to PORTA[0:3] 
@@ -47,18 +33,10 @@ void fourBitCommandWithDelay(unsigned char data, unsigned int delay){
   delayUs(delay);
 }
 
-/* Similar to fourBitCommandWithDelay except that now all eight bits of command are
- * sent.
- * 1. Assert bits to pins connected to DB[7:4] on the LCD screen
- *       a. unlike fourBitCommandWithDelay, you need to send the TOP four bits of
- *          "command" first. These should be assigned to appropriate bits in PORTA
- * 2. This is a command signal, meaning RS should be low
- * 3. Assert high on enable pin, delay, and asset low on enable pin
- * 4. Now set the lower four bits of command to appropriate bits in PORTA
- * 5. Assert high on enable pin, delay, and asset low on enable pin
- * 6. delay the provided number in MICROseconds.
- */
+
+ 
 void eightBitCommandWithDelay(unsigned char command, unsigned int delay){
+
   // assigns top 4 bits of data to PORTA[0:3] 
   PORTA = (PORTA & 0xF0) | (command>>4 & 0x0F);
   // PORTA = command >> 4;
@@ -84,14 +62,7 @@ void eightBitCommandWithDelay(unsigned char command, unsigned int delay){
   delayUs(delay);
 }
 
-/* Similar to eightBitCommandWithDelay except that now RS should be high
- * 1. Assert bits to pins connected to DB[7:4] on the LCD screen
- * 2. This is a "data" signal, meaning RS should be high
- * 3. Assert high on enable pin, delay, and asset low on enable pin
- * 4. Now set the lower four bits of character to appropriate bits in PORTA
- * 5. Assert high on enable pin, delay, and asset low on enable pin
- * 6. delay is always 46 MICROseconds for a character write
- */
+
 void writeCharacter(unsigned char character){
   // assigns top 4 bits of data to PORTA[0:3] 
   PORTA = (PORTA & 0xF0) | (character>>4 & 0x0F);
@@ -116,11 +87,7 @@ void writeCharacter(unsigned char character){
   delayUs(46);
 }
 
-/*
- * Writes a provided string such as "Hello!" to the LCD screen. You should
- * remember that a c string always ends with the '\0' character and
- * that this should just call writeCharacter multiple times.
- */
+
 void writeString(const char *string){
   //repeatedly calls writeCharacter, until the string lands on the NULL character
   while(*string != '\0'){

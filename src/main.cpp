@@ -3,17 +3,27 @@
 #include "timer.h"
 #include "i2c.h"
 #include "tempConv.h"
+#include "lcd.h"
 
-int main()
-{
-	//SETUP
+typedef enum stateType_enum {
+  standby, check, watering
+} stateType;
+
+volatile stateType state = check;
+
+void setup() {
+
 	Serial.begin(9600);
 	sei();
 	initI2C();
 	initTimer();
+	initLCD();
 
+}
+
+int main()
+{
 	int temp = 0;
-
 	beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
 	write(0x01); // command byte selects the CONFIG register
   	write(0x00); //take the device out of standby
@@ -32,6 +42,31 @@ int main()
 
 	while (1)
 	{
+		switch(state) {
+
+      case check: //measures temperature and soil moisture 
+	  	//print temperature and soil moisture
+	  	//if temperature is above freezing and soil is dry, state = watering
+		//else, state = standby     
+        break;
+
+      case watering:
+		//red LED off
+		//green LED on
+		//turn water pump on
+		//delay a certain amount of time
+		//turn waterpump off
+		//green LED off
+		//red LED on
+        break;
+
+      case standby:
+	  	//delay one hour
+		state = check;
+        break;
+
+    }
+
 		delayMs(1000);
 
 		// Read Data from TEMP register
