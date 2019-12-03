@@ -28,8 +28,8 @@ void setup() {
 
 int main()
 {
-	int temp = 0;
-	///////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////////////
 	//Intaking analog voltage from moisture sensor, converting to digital with ADC0
 	unsigned int moistureAnalog = 0;
 	unsigned int moistureVolt = 0;
@@ -40,8 +40,9 @@ int main()
 
     //need to check voltage for VCC
     moistureVolt = moistureAnalog * (4.943/1024.0);
-	/////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////
 
+	int temp = 0;
 	beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
 	write(0x01); // command byte selects the CONFIG register
   	write(0x00); //take the device out of standby
