@@ -4,12 +4,15 @@
 #include "i2c.h"
 #include "tempConv.h"
 #include "lcd.h"
+#include "led.h"
+
 
 typedef enum stateType_enum {
   standby, check, watering
 } stateType;
 
 volatile stateType state = check;
+
 
 void setup() {
 
@@ -18,7 +21,7 @@ void setup() {
 	initI2C();
 	initTimer();
 	initLCD();
-
+	initLED();
 }
 
 int main()
@@ -71,14 +74,12 @@ int main()
 
       	case watering:	//Water plant for BLANK seconds of time, with indications to user with use of LEDs
 
-			//red LED off
-			//green LED on
+			ledWaterOn();	//sets LEDs to watering state
 			//turn water pump on
 			//delay a certain amount of time
 			//turn waterpump off
-			//green LED off
-			//red LED on
-			//state = standby
+			ledWaterOff();	//sets LEDs to standby state
+			state = standby;
 			break;
 
       	case standby:	//Sets sensor(s) to standby to conserve power, and delays to next check
@@ -87,9 +88,7 @@ int main()
 			//delay one hour
 			state = check;
 			break;
-
     	}
 	}
-
 	return 0;
 }
