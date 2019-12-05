@@ -68,7 +68,7 @@ int main()
 			moistureVolt = readMoisture();	//takes in soil moisture
     		temp = convToF(temp);
 
-			//print temperature to LCD
+			//print temperature to LCD	TEST/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			Serial.flush();
 			Serial.print("Temperature is: ");
 			Serial.println(temp);
