@@ -1,18 +1,11 @@
 #include "adc.h"
 #include "timer.h"
-#include <util/delay.h>
+#include <avr/io.h>
 
-
-
-//1. A function exists to initialize the ADC
-//2. Uses the A0 pin as an input
-
-
-void initADC0(){
-    //configure refernce voltage to AVCC
+void initADC0() {   //Uses A0 as input
+    
     ADMUX |= (1 << REFS0);
     ADMUX &= ~(1 << REFS1);
-    
 
     //Right justified ADLAR = 0
     ADMUX &= ~(1 << ADLAR);
@@ -38,6 +31,7 @@ void initADC0(){
 
     //ADC0 pin digital input disable input buffer as 1 as we are intaking analog instead
     DIDR0 |= (1<< ADC0D);
+
 
     // start the first conversion
     ADCSRA |= (1 << ADSC);

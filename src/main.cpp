@@ -1,5 +1,6 @@
 
 #include <Arduino.h>
+#include <avr/io.h>
 #include "timer.h"
 #include "i2c.h"
 #include "tempConv.h"
@@ -28,7 +29,8 @@ void setup() {
 
 int main()
 {
-	
+	setup();
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//Intaking analog voltage from moisture sensor, converting to digital with ADC0
 	unsigned int moistureAnalog = 0;
@@ -57,7 +59,6 @@ int main()
 	endTransmission(); 
  }
 
-	Serial.flush();
 
 	while (1) {
 		delayMs(1000);
@@ -70,6 +71,7 @@ int main()
     	temp = convToF(temp);
 
 		// Print data
+		Serial.flush();
 		Serial.print("Temperature is: ");
 		Serial.println(temp);
     	Serial.println(" F");

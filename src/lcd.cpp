@@ -1,9 +1,6 @@
-
+#include <avr/io.h>
 #include "lcd.h"
 #include "timer.h"
-#include <util/delay.h>
-//#include <Arduino.h>
-
 
 void initLCDPins(){
 
