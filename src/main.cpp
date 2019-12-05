@@ -31,20 +31,11 @@ int main()
 {
 	setup();
 
-	//////////////////////////////////////////////////////////////////////////////////////////
-	//Intaking analog voltage from moisture sensor, converting to digital with ADC0
-	unsigned int moistureAnalog = 0;
 	unsigned int moistureVolt = 0;
-
-	// read in ADCL first then read ADCH
-    moistureAnalog = ADCL;
-    moistureAnalog += ((unsigned int) ADCH) << 8;
-
-    //need to check voltage for VCC
-    moistureVolt = moistureAnalog * (4.943/1024.0);
-	//////////////////////////////////////////////////////////////////////////////////////////
-
 	int temp = 0;
+
+
+
 	beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
 	write(0x01); // command byte selects the CONFIG register
   	write(0x00); //take the device out of standby
@@ -53,56 +44,68 @@ int main()
   bool condition = false; //this can be updated later with our 10 minute timer stuff to set device into standby for an hour after watering
 
  if (condition == true){ //if the device just watered, put in standby for an hour to save power
- 	beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
-	write(0x01); // command byte selects the CONFIG register
-  	write(0x80); //put the device in standby
-	endTransmission(); 
+
  }
 
 
 	while (1) {
-		delayMs(1000);
-
-		// Read Data from TEMP register
-		requestFrom(0x9A, 0x00); //request the TEMP register of the device
-		temp = read();
-
-    	//Convert to Fahrenheit
-    	temp = convToF(temp);
-
-		// Print data
-		Serial.flush();
-		Serial.print("Temperature is: ");
-		Serial.println(temp);
-    	Serial.println(" F");
-
-		Serial.println();
 	
 		switch(state) {
 
       	case check: //Checks to see if plant should be watered
 
-			//take temperature (AND SOIL MOISTURE?) sensor(s) out of standby
-			//measures temperature and soil moisture 
+			//take temperature sensor out of standby
+			beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
+			write(0x01); // command byte selects the CONFIG register
+  			write(0x00); //take the device out of standby
+			endTransmission(); 
+
+			//take soil moisture sensor out of standy???????????????????????????????????????????????????????????????????????????????????????????????????
+
+			//measures temperature and moisture and converts temp to Fahrenheit
+			requestFrom(0x9A, 0x00); //request the TEMP register of the device
+			temp = read();
+			moistureVolt = readMoisture();	//takes in soil moisture
+    		temp = convToF(temp);
+
 			//print temperature to LCD
-			//if (temperature is above 1 Celsius (as sensor tolerance is +/- 1C) and soil is dry) { state = watering; }
-			//else { state = standby; }    
+			Serial.flush();
+			Serial.print("Temperature is: ");
+			Serial.println(temp);
+			Serial.println(" F");
+			Serial.println();
+
+			if ((temp > 33.8) && (moistureVolt <= 2.5)) {	//as sensor tolerance is +/- 1C (33.8F) //CHANGE 2.5 TO CORRECT VOLTAGE//////////////////////////
+				 state = watering; 
+				 }
+			else { 
+				//put temperature sensor into standby
+				beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
+				write(0x01); // command byte selects the CONFIG register
+				write(0x80); //put the device in standby
+				endTransmission(); 
+
+				//put moisture sensor into standy???????????????????????????????????????????????????????????????????????????????????????????????????????????????
+
+				state = standby; 
+				}    
 			break;
 
-      	case watering:	//Water plant for BLANK seconds of time, with indications to user with use of LEDs
+      	case watering:	//Water plant for BLANK seconds of time, with indications to user with use of LEDs///////////////////////////////////////////////////
 
 			ledWaterOn();	//sets LEDs to watering state
 			//turn water pump on
-			//delay a certain amount of time
+			delayMs(10000);	//delay 10 seconds //CHANGE TO CORRECT AMOUNT OF TIME//////////////////////////////////////////////////////////////////////
 			//turn waterpump off
 			ledWaterOff();	//sets LEDs to standby state
-			state = standby;
+			state = check;
 			break;
 
-      	case standby:	//Sets sensor(s) to standby to conserve power, and delays to next check
+      	case standby:	//Delays to next check
 
-			//set sensor(s) to standby
-			//delay one hour
+			for (int i = 0; i < 60; ++i){	//delays one hour
+			delayMs(60000);	//delay one minute
+			}
 			state = check;
 			break;
     	}
