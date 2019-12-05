@@ -30,23 +30,8 @@ void setup() {
 int main()
 {
 	setup();
-
 	unsigned int moistureVolt = 0;
 	int temp = 0;
-
-
-
-	beginTransmission(0x9A); // Target sensor with 10011010, 1001101 is address, 0 is write for start sequence =>0x9A
-	write(0x01); // command byte selects the CONFIG register
-  	write(0x00); //take the device out of standby
-	endTransmission(); 
-
-  bool condition = false; //this can be updated later with our 10 minute timer stuff to set device into standby for an hour after watering
-
- if (condition == true){ //if the device just watered, put in standby for an hour to save power
-
- }
-
 
 	while (1) {
 	
@@ -75,6 +60,7 @@ int main()
 			Serial.println(" F");
 			Serial.println();
 
+			//Checks to see if next state is water or standby
 			if ((temp > 33.8) && (moistureVolt <= 2.5)) {	//as sensor tolerance is +/- 1C (33.8F) //CHANGE 2.5 TO CORRECT VOLTAGE//////////////////////////
 				 state = watering; 
 				 }
@@ -104,7 +90,7 @@ int main()
       	case standby:	//Delays to next check
 
 			for (int i = 0; i < 60; ++i){	//delays one hour
-			delayMs(60000);	//delay one minute
+				delayMs(60000);	//delay one minute
 			}
 			state = check;
 			break;
