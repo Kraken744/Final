@@ -39,14 +39,11 @@ void initADC0() {   //Uses A0 as input
 
 unsigned int readMoisture(){
     unsigned int moistureAnalog = 0;
-	unsigned int moistureVolt = 0;
 
 	// read in ADCL first then read ADCH
     moistureAnalog = ADCL;
     moistureAnalog += ((unsigned int) ADCH) << 8;
 
-    //need to check voltage for VCC
-    moistureVolt = moistureAnalog * (4.943/1024.0);
 
-    return moistureVolt;
+    return moistureAnalog;
 }

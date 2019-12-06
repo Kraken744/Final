@@ -7,7 +7,7 @@ void initLCDPins(){
   //PORTA is for DB[7:4]
   DDRA |= (1<<DDA0) | (1<<DDA1) | (1<<DDA2) | (1<<DDA3); 
 
-  //B4 is for RS, B6 is for Enable
+  //B4 (10) is for RS, B6(12) is for Enable
   DDRB |= (1<<DDB4) | (1<<DDB6);
 
 }
