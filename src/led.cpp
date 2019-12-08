@@ -7,7 +7,7 @@
 void initLED(){
 
   // DDRAx  direction as output
-  DDRB |=  (1<<DDB0) | (1<<DDB1) ;
+  DDRB |=  (1<<DDB0) | (1<<DDB1);
 }
 
 
