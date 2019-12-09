@@ -65,7 +65,7 @@ int main()
 			moveCursor(0,0);
 
 			//Checks to see if next state is water or standby
-			if ((temp > 33.8) && (moistureVolt <= 250)) {	//as sensor tolerance is +/- 1C (33.8F) //CHANGE 2.5 TO CORRECT VOLTAGE//////////////////////////
+			if ((temp > 33.8) && (moistureVolt <= 250)) {	//as sensor tolerance is +/- 1C (33.8F)
 				 state = watering; 
 				 }
 			else { 
